@@ -6,14 +6,33 @@
 ;; fill in  tests for your game
 (deftest test-play-round
   (testing "the highest rank wins the cards in the round"
-    (is (= 0 1)))
-  (testing "queens are higher rank than jacks")
-  (testing "kings are higher rank than queens")
-  (testing "aces are higher rank than kings")
-  (testing "if the ranks are equal, clubs beat spades")
-  (testing "if the ranks are equal, diamonds beat clubs")
-  (testing "if the ranks are equal, hearts beat diamonds"))
+    (is (= (play-round [:heart 10] [:diamond :jack])
+           :p2)))
+  (testing "queens are higher rank than jacks"
+    (is (= (play-round [:spade :queen] [:spade :jack])
+           :p1)))
+  (testing "kings are higher rank than queens"
+    (is (= (play-round [:club :queen] [:club :king])
+           :p2)))
+  (testing "aces are higher rank than kings"
+    (is (= (play-round [:diamond :ace] [:diamond :king])
+           :p1)))
+  (testing "if the ranks are equal, clubs beat spades"
+    (is (= (play-round [:spade :jack] [:club :jack])
+           :p2)))
+  (testing "if the ranks are equal, diamonds beat clubs"
+    (is (= (play-round [:diamond 8] [:club 8])
+           :p1)))
+  (testing "if the ranks are equal, hearts beat diamonds"
+    (is (= (play-round [:diamond 3] [:heart 3])
+           :p2))))
 
 (deftest test-play-game
-  (testing "the player loses when they run out of cards"))
+  (testing "the player loses when they run out of cards"
+    (is (= (play-game [[:heart :king]] [])
+           :p1))
+    (is (= (play-game [] [[:heart :king]])
+           :p2))
+    (is (= (play-game (vec (take 26 cards)) (vec (drop 26 cards)))
+           :p2))))
 
